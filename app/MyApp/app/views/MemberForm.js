@@ -249,7 +249,6 @@ $(function() {
         },
 
         setForm: function() {
-            alert('testing')
             $('#formButtonCancel').css('pointer-events','auto');
             $('#nav').css('pointer-events','auto');
             if ($('#ptManager').attr('checked')) { // if promote to manager checkbox is ticked
