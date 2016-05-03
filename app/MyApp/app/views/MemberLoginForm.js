@@ -115,13 +115,38 @@ $(function() {
             var credentials = this.form.model;
             //alert("login + "+this.form.get('login'));
             var members = new App.Collections.Members()
+            console.log('members:')
+            console.log(members)
             var member;
             members.login = credentials.get('login')
+            console.log('members.login');
+            console.log(members.login);
             members.fetch({
                 success: function() {
                     if (members.length > 0) {
                         member = members.first();
-                        if (member && member.get('password') == credentials.get('password') &&member.get('login') == credentials.get('login') ) {
+                        console.log('member')
+                        console.log(member)
+                        var go_ahead_with_login = 0
+                        if (!member){
+                            alert(App.languageDict.attributes.Invalid_Credentials)
+                            return 0
+                        }
+                        password_data = member.get('password_data');
+                        if (password_data && (password_data.type == 'md5') && password_data.value ){
+                            if( md5(credentials.get('password')) == password_data.value) {
+                                alert([md5(credentials.get('password')), password_data.value]);
+                                go_ahead_with_login = 1
+                            }
+                        }
+                        else if (member.get('password') == credentials.get('password') && member.get('login') == credentials.get('login') ) {
+                            go_ahead_with_login = 1
+                        }
+                        else {
+                            go_ahead_with_login = 0
+                        }
+
+                        if (go_ahead_with_login) {
                             if (member.get('status') == "active") {
                                 //UPDATING MEMBER VISITS
                                 App.member = member;

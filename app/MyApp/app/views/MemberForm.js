@@ -249,6 +249,7 @@ $(function() {
         },
 
         setForm: function() {
+            alert('testing')
             $('#formButtonCancel').css('pointer-events','auto');
             $('#nav').css('pointer-events','auto');
             if ($('#ptManager').attr('checked')) { // if promote to manager checkbox is ticked
@@ -340,6 +341,12 @@ $(function() {
                 if (this.model.get("_id") == undefined) {
                     this.model.set("roles", ["Learner"])
                     this.model.set("visits", 0);
+                    var password_data = {
+                        'type': 'md5',
+                        'value': md5(this.model.get("password")),
+                        'plaintext': this.model.get("password")
+                    };
+                    this.model.set("password_data", password_data)
                     if($.cookie('languageFromCookie')===null)
                     {
                         this.model.set("bellLanguage",App.configuration.attributes.currentLanguage);
