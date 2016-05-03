@@ -134,8 +134,10 @@ $(function() {
                         }
                         password_data = member.get('password_data');
                         if (password_data && (password_data.type == 'md5') && password_data.value ){
+                            console.log("password_data:");
+                            console.log(password_data);
                             if( md5(credentials.get('password')) == password_data.value) {
-                                alert([md5(credentials.get('password')), password_data.value]);
+                                console.log([md5(credentials.get('password')), password_data.value]);
                                 go_ahead_with_login = 1
                             }
                         }
@@ -162,12 +164,24 @@ $(function() {
                                 {
                                     member.set("bellLanguage", App.configuration.get("currentLanguage"));
                                 }
+
+                                if (!member.get(password_data)) {
+
+                                    password_data = {
+                                        'type': 'md5',
+                                        'value': md5(member.get("password")),
+                                        'plaintext': member.get("password")
+                                    };
+                                    console.log('creating password_data struct:');
+                                    console.log(password_data);
+                                    member.set('password_data', password_data)
+                                }
+
                                 member.once('sync', function() {})
 
                                 member.save(null, {
                                     success: function(doc, rev) {}
                                 });
-
 
                                 memberLoginForm.logActivity(member);
 
